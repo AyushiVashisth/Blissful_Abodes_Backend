@@ -157,13 +157,13 @@ def get_all_properties():
     page = int(request.args.get('page', 1)) 
     per_page = int(request.args.get('per_page', 9)) 
     title_filter = request.args.get('property_name', '')
-    property_type_filter = request.args.get('propertyType', '')
+    property_name_filter = request.args.get('property_name', '')
     state_filter = request.args.get('state', '')
     filter_query = {}
     if title_filter:
         filter_query['property_name'] = {'$regex': title_filter, '$options': 'i'} 
-    if property_type_filter:
-        filter_query['propertyType'] = property_type_filter
+    if property_name_filter:
+        filter_query['propertyType'] = property_name_filter
     if state_filter:
         filter_query['location'] = state_filter
 
