@@ -73,6 +73,7 @@ def host_signup():
     hashed_password = hash_password(password)
 
     host_id = db.hosts.insert_one({
+        "username": username,
         "email": email,
         "password": hashed_password,
     }).inserted_id
@@ -94,6 +95,7 @@ def guest_signup():
     hashed_password = hash_password(password)
 
     guest_id = db.guests.insert_one({
+        "username": username,
         "email": email,
         "password": hashed_password,
     }).inserted_id
@@ -105,7 +107,6 @@ def host_login():
     # implementation for host login
     db = get_db()
     data = request.get_json()
-    username=data.get('username')
     email = data.get('email')
     password = data.get('password')
 
