@@ -25,7 +25,7 @@ multidict==6.0.4
 packaging==23.1
 platformdirs==3.8.0
 pluggy==1.2.0
-prettytable==3.8.0
+prettytable==3.7.0
 pymongo==4.4.1
 prettytable==3.7.0
 pytest==7.4.0

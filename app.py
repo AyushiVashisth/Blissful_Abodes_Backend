@@ -65,6 +65,7 @@ def host_signup():
     # implementation for host signup
     db = get_db()
     data = request.get_json()
+    username=data.get('username')
     email = data.get('email')
     password = data.get('password')
     if db.hosts.find_one({"email": email}):
@@ -83,6 +84,7 @@ def guest_signup():
     # implementation for guest signup
     db = get_db()
     data = request.get_json()
+    username=data.get('username')
     email = data.get('email')
     password = data.get('password')
 
@@ -103,6 +105,7 @@ def host_login():
     # implementation for host login
     db = get_db()
     data = request.get_json()
+    username=data.get('username')
     email = data.get('email')
     password = data.get('password')
 
