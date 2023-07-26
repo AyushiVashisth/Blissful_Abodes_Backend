@@ -165,7 +165,7 @@ def get_all_properties():
     if property_name_filter:
         filter_query['propertyType'] = property_name_filter
     if state_filter:
-        filter_query['location'] = state_filter
+        filter_query['state'] = state_filter
 
     total_properties = db.properties.count_documents(filter_query)
 
@@ -191,7 +191,6 @@ def get_all_properties():
         res.append({
             "id": str(property["_id"]),
             "name": str(property['name']),
-            "location": str(property['location']),
             "hostingSince": str(property['hostingSince']),
             "about": str(property['about']),
             "description": str(property['description']),
@@ -218,7 +217,6 @@ def get_property(property_id):
         res = {
             "id": str(property["_id"]),
             "name": str(property['name']),
-            "location": str(property['location']),
             "hostingSince": str(property['hostingSince']),
             "about": str(property['about']),
             "description": str(property['description']),
