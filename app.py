@@ -246,7 +246,7 @@ def create_property():
     db = get_db()
     data = request.get_json()
     # Convert the availability value to a boolean
-    data["availability"] = bool(data["availability"])
+    # availability = "Available" if bool(data["availability"]) else "Not Available"
     property = Property(
         name=data["name"],
         hostingSince=data["hostingSince"],
