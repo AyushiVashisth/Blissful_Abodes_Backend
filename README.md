@@ -73,12 +73,7 @@ The following key features will be implemented in the application:
 
 
 <ul dir="auto">
- <ol dir="auto">◉ Python : 99.3%</ol>
- <ol dir="auto">◉ CSS : 0.2%</ol>
- <ol dir="auto">◉ TypeScript : 0.2%</ol>
- <ol dir="auto">◉ HTML : 0.1%</ol>
- <ol dir="auto">◉ PowerShell : 0.1%</ol>
- <ol dir="auto">◉ JavaScript : 0.1%</ol>
+ <ol dir="auto">◉ Python : 100%</ol>
  </ul>
  
 ### This report is provided by the GitHub language used stats. So, this is the total percentage of the coding languages.
