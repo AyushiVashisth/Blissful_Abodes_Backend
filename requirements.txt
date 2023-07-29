@@ -44,5 +44,5 @@ tqdm==4.65.0
 urllib3==2.0.3
 virtualenv==20.23.1
 wcwidth==0.2.6
-Werkzeug==2.3.6
+Werkzeug==2.2.3
 yarl==1.9.2
