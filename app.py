@@ -26,13 +26,12 @@ restart_sequence = "\nAI: "
 
 
 # SocketIO setup
-app.config["SECRET_KEY"] = "secret_key"
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 app.secret_key = "ayushi"  
 app.config['SESSION_TYPE'] = 'filesystem'  
 
-MONGO_URI = "MONGO_URI"  
+MONGO_URI = app.config['MONGO_URI']
 DB_NAME = "blissful_abodes"  
 
 # MongoDB setup
