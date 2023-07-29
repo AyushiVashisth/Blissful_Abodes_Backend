@@ -13,11 +13,11 @@ CORS(app)
 
 # Load environment variables from the .env file
 load_dotenv()
-
+MONGO_URI="mongodb+srv://ayushi:ayushivashisth@cluster0.xzliwxo.mongodb.net/?retryWrites=true&w=majority"
 # Access environment variables using 'os.environ.get()'
 app.config['api_key'] = os.environ.get('APIKEY')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
+# app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
 
 openai.api_key = app.config['api_key']
 model_id = "text-davinci-003"  # Specify the ChatGPT model ID
@@ -31,7 +31,7 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 app.secret_key = "ayushi"  
 app.config['SESSION_TYPE'] = 'filesystem'  
 
-MONGO_URI = app.config['MONGO_URI']
+# MONGO_URI = app.config['MONGO_URI']
 DB_NAME = "blissful_abodes"  
 
 # MongoDB setup
