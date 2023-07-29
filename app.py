@@ -45,13 +45,13 @@ class Property:
 
 # Booking class
 class Booking:
-    def __init__(self,property_img, property_id, property_name, price, property_city, checkInDate, checkOutDate):
+    def __init__(self,property_image, property_id, property_name, price, property_state, checkInDate, checkOutDate):
         self._id = ObjectId()
         self.property_id = property_id
         self.property_name = property_name
-        self.property_price = price
-        self.property_city = property_city
-        self.property_image=property_img,
+        self.price = price
+        self.property_state = property_state
+        self.property_image=property_image,
         self.checkInDate = checkInDate
         self.checkOutDate = checkOutDate
 
@@ -292,7 +292,7 @@ def post_property_to_book_collection():
     data = request.get_json()
     property_id = data.get('property_id')
     property_name = data.get('property_name')
-    property_price = data.get('property_price')
+    price = data.get('price')
     property_state = data.get('property_state')
     property_image = data.get('property_image') 
     checkInDate = data.get('checkInDate')
@@ -301,9 +301,9 @@ def post_property_to_book_collection():
     booking = Booking(
         property_id=property_id,
         property_name=property_name,
-        property_price=property_price,
+        price=price,
+        property_image=property_image,
         property_state=property_state,
-        property_image=property_image,  
         checkInDate=checkInDate,
         checkOutDate=checkOutDate
     )
@@ -325,8 +325,8 @@ def get_all_book_data():
             "booking_id": str(book_entry["_id"]),
             "property_id": str(book_entry.get("property_id")),
             "property_name": str(book_entry.get("property_name")),
-            "property_price": str(book_entry.get("property_price")),
-            "property_state": str(book_entry.get("property_state")),
+            "price": str(book_entry.get("price")),
+            # "property_state": str(book_entry.get("property_state")),
             "property_image":str(book_entry.get("property_image")),
             "checkInDate": str(book_entry.get("checkInDate")),
             "checkOutDate": str(book_entry.get("checkOutDate"))
@@ -343,8 +343,8 @@ def get_book_data(booking_id):
             "booking_id": str(book_entry["_id"]),
             "property_id": str(book_entry.get("property_id")),
             "property_name": str(book_entry.get("property_name")),
-            "property_price": str(book_entry.get("property_price")),
-            "property_state": str(book_entry.get("property_state")),
+            "price": str(book_entry.get("price")),
+            # "property_state": str(book_entry.get("property_state")),
             "property_image":str(book_entry.get("property_image")),
             "checkInDate": str(book_entry.get("checkInDate")),
             "checkOutDate": str(book_entry.get("checkOutDate"))
