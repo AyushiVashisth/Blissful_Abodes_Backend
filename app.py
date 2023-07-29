@@ -1,15 +1,38 @@
 from flask import Flask, request, jsonify, session
+from flask_socketio import SocketIO, emit
 from pymongo import MongoClient
 from flask_cors import CORS
 from bson.objectid import ObjectId
 import bcrypt
+import openai
+from dotenv import load_dotenv
+import os
 
 app = Flask(__name__)
 CORS(app) 
+
+# Load environment variables from the .env file
+load_dotenv()
+
+# Access environment variables using 'os.environ.get()'
+app.config['api_key'] = os.environ.get('APIKEY')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
+
+openai.api_key = app.config['api_key']
+model_id = "text-davinci-003"  # Specify the ChatGPT model ID
+start_sequence = "\nHuman: "
+restart_sequence = "\nAI: "
+
+
+# SocketIO setup
+app.config["SECRET_KEY"] = "secret_key"
+socketio = SocketIO(app, cors_allowed_origins="*")
+
 app.secret_key = "ayushi"  
 app.config['SESSION_TYPE'] = 'filesystem'  
 
-MONGO_URI = "mongodb+srv://ayushi:ayushivashisth@cluster0.xzliwxo.mongodb.net/?retryWrites=true&w=majority"  
+MONGO_URI = "MONGO_URI"  
 DB_NAME = "blissful_abodes"  
 
 # MongoDB setup
@@ -366,6 +389,85 @@ def delete_book_data(booking_id):
                 db.properties.update_one({"_id": ObjectId(property_id)}, {"$set": {"status": True}})
             return jsonify({"message": "Booking data deleted successfully"})
     return jsonify({"message": "Booking data not found"}), 404
+# SocketIO event handler for order status updates
+@socketio.on("connect")
+def handle_connect():
+    print("Client connected")
 
-if __name__ == '__main__':
-    app.run(debug=True)
+
+@socketio.on("disconnect")
+def handle_disconnect():
+    print("Client disconnected")
+
+@app.route("/conversation", methods=["POST"])
+def generate_response():
+    data = request.get_json()
+    user_message = data["message"]
+
+    conversation_history = f"{start_sequence}{user_message}{restart_sequence}"
+
+    try:
+        response = openai.Completion.create(
+            model=model_id,
+            prompt=conversation_history,
+            temperature=0.7,
+            max_tokens=50,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0,
+            n=1,
+            stop=None,
+        )
+
+        ai_response = response.choices[0].text.strip().replace(restart_sequence, "")
+        conversation_history += f"{start_sequence}{ai_response}{restart_sequence}"
+
+        # Set the 'Access-Control-Allow-Origin' header to allow requests from 'http://localhost:3000'
+        headers = {
+            "Access-Control-Allow-Origin": "http://localhost:3000"
+        }
+
+        return jsonify({"message": ai_response.strip()}), 200, headers
+
+    except Exception as e:
+        # Print the error to the console for debugging
+        print("An error occurred during the conversation:", e)
+
+        # Return an error response
+        return jsonify({"message": "An error occurred during the conversation.", "error": str(e)}), 500
+
+@app.after_request
+def add_cors_headers(response):
+    response.headers["Access-Control-Allow-Origin"] = "http://localhost:4200"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PATCH, DELETE"
+    return response
+
+    
+# SocketIO event handler for incoming messages
+@socketio.on("message")
+def handle_message(message):
+    print("Received message:", message)
+
+    # Send the user message to ChatGPT for processing
+    response = openai.Completion.create(
+        engine=model_id,
+        prompt=message,
+        max_tokens=50,
+        n=1,
+        stop=None,
+        temperature=0.7,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0,
+        best_of=1,
+    )
+
+    generated_message = response.choices[0].text.strip()
+
+    # Emit the generated message back to the client
+    emit("message", generated_message)
+
+if __name__ == "__main__":
+    CORS(app)
+    socketio.run(app, debug=True)
